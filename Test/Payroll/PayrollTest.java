@@ -39,7 +39,7 @@ public class PayrollTest {
     public void TestAddHourlyEmployee()
     {
         int empId = 2;
-        AddHourlyEmployee t = new AddHourelyEmployee(empId, "Mark", "Home2", 15.00);
+        AddHourlyEmployee t = new AddHourlyEmployee(empId, "Mark", "Home2", 15.00);
         t.execute();
 
         Employee employee = PayrollDatabase.getEmployee(empId);
