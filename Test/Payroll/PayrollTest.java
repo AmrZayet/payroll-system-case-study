@@ -88,4 +88,21 @@ public class PayrollTest {
         HoldMethod holdMethod = (HoldMethod) paymentMethod;
         Assertions.assertNotNull(holdMethod);
     }
+
+    @Test
+    public void TestDeleteEmployee()
+    {
+        int empId = 4;
+        AddSalariedEmployee t = new AddSalariedEmployee(empId, "Martin", "Home4", 2000.00);
+        t.execute();
+
+        Employee employee = PayrollDatabase.getEmployee(empId);
+        Assertions.assertNotNull(employee);
+
+        DeleteEmployeeTransaction dt = new DeleteEmployeeTransaction(empId);
+        dt.execute();
+
+        Employee employee1 = PayrollDatabase.getEmployee(empId);
+        Assertions.assertNull(employee1);
+    }
 }
