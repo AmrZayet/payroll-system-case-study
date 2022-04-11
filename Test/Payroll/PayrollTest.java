@@ -61,4 +61,31 @@ public class PayrollTest {
         HoldMethod holdMethod = (HoldMethod) paymentMethod;
         Assertions.assertNotNull(holdMethod);
     }
+
+    @Test
+    public void TestAddCommissionedEmployee()
+    {
+        int empId = 3;
+        AddCommissiondEmployee t = new AddCommissiondEmployee(empId, "Brian", "Home3", 1500.00, 5.00);
+        t.execute();
+
+        Employee employee = PayrollDatabase.getEmployee(empId);
+        Assertions.assertNotNull(employee);
+        Assertions.assertEquals("Brian", employee.getName());
+        Assertions.assertEquals("Home3", employee.getAddress());
+
+        PaymentClassification paymentClassification = employee.getPaymentClassification();
+        CommissionedClassification commissionedClassification = (CommissionedClassification) paymentClassification;
+        Assertions.assertNotNull(commissionedClassification);
+        Assertions.assertEquals(1500.0, commissionedClassification.getSalary());
+        Assertions.assertEquals(5.00, commissionedClassification.getCommisionRate());
+
+        PaymentSchedule paymentSchedule = employee.getPaymentSchedule();
+        BiweeklySchedule biweeklySchedule = (BiweeklySchedule) paymentSchedule;
+        Assertions.assertNotNull(biweeklySchedule);
+
+        PaymentMethod paymentMethod = employee.getPaymentMethod();
+        HoldMethod holdMethod = (HoldMethod) paymentMethod;
+        Assertions.assertNotNull(holdMethod);
+    }
 }
