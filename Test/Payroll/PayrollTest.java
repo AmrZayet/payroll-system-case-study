@@ -66,7 +66,7 @@ public class PayrollTest {
     public void TestAddCommissionedEmployee()
     {
         int empId = 3;
-        AddCommissiondEmployee t = new AddCommissiondEmployee(empId, "Brian", "Home3", 1500.00, 5.00);
+        AddCommissionedEmployee t = new AddCommissionedEmployee(empId, "Brian", "Home3", 1500.00, 5.00);
         t.execute();
 
         Employee employee = PayrollDatabase.getEmployee(empId);
@@ -78,7 +78,7 @@ public class PayrollTest {
         CommissionedClassification commissionedClassification = (CommissionedClassification) paymentClassification;
         Assertions.assertNotNull(commissionedClassification);
         Assertions.assertEquals(1500.0, commissionedClassification.getSalary());
-        Assertions.assertEquals(5.00, commissionedClassification.getCommisionRate());
+        Assertions.assertEquals(5.00, commissionedClassification.getCommissionRate());
 
         PaymentSchedule paymentSchedule = employee.getPaymentSchedule();
         BiweeklySchedule biweeklySchedule = (BiweeklySchedule) paymentSchedule;
