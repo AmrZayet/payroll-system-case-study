@@ -11,6 +11,10 @@ public class PayrollDatabase {
         employeesList.put(employeeId, employee);
     }
 
+    public static void deleteEmployee(int employeeId) {
+        employeesList.remove(employeeId);
+    }
+
     public static Employee getEmployee(int employeeId) {
         return employeesList.get(employeeId);
     }
@@ -18,6 +22,4 @@ public class PayrollDatabase {
     public static void clearDatabase() {
         employeesList.clear();
     }
-
-
 }
