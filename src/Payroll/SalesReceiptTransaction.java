@@ -3,12 +3,12 @@ package Payroll;
 public class SalesReceiptTransaction implements Transaction {
     int transactionEmployeeId;
     long transactionDate;
-    double transactionAmount;
+    double transactionSalesAmount;
 
-    public SalesReceiptTransaction(int transactionEmployeeId, long transactionDate, double transactionAmount) {
+    public SalesReceiptTransaction(int transactionEmployeeId, long transactionDate, double transactionSalesAmount) {
         this.transactionEmployeeId = transactionEmployeeId;
         this.transactionDate = transactionDate;
-        this.transactionAmount = transactionAmount;
+        this.transactionSalesAmount = transactionSalesAmount;
     }
 
 
@@ -19,7 +19,7 @@ public class SalesReceiptTransaction implements Transaction {
         if(employee != null) {
             try {
                 CommissionedClassification commissionedClassification = (CommissionedClassification) employee.getPaymentClassification();
-                commissionedClassification.addSalesReceipt(new SalesReceipt(transactionDate, transactionAmount));
+                commissionedClassification.addSalesReceipt(new SalesReceipt(transactionDate, transactionSalesAmount));
             } catch (ClassCastException e) {
                 System.err.println("Tried to add sales receipt to non-commissioned employee");
             }

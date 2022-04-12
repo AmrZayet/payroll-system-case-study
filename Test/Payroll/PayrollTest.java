@@ -148,7 +148,7 @@ public class PayrollTest {
         AddSalariedEmployee t = new AddSalariedEmployee(empId,"Robbin", "Home7", 2500.00);
         t.execute();
 
-        int memberId = 86;
+        int memberId = 87;
         SetAffiliationTransaction sat = new SetAffiliationTransaction(empId, memberId, 12.5);
         sat.execute();
 
@@ -160,5 +160,26 @@ public class PayrollTest {
         UnionAffiliation unionAffiliation = (UnionAffiliation) affiliation;
 
         Assertions.assertEquals(12.5, unionAffiliation.getDues());
+    }
+
+
+    @Test
+    public void TestAddServiceCharge() {
+        int empId = 8;
+        AddHourlyEmployee t = new AddHourlyEmployee(empId,"Bill", "Home8", 15.25);
+        t.execute();
+
+        int memberId = 88;
+        SetAffiliationTransaction sat = new SetAffiliationTransaction(empId, memberId, 12.0);
+        sat.execute();
+
+        ServiceChargeTransaction sct = new ServiceChargeTransaction(memberId, 20220412, 12.95);
+        sct.execute();
+
+        Employee employee = PayrollDatabase.getEmployee(empId);
+        UnionAffiliation unionAffiliation = (UnionAffiliation) employee.getAffiliation();
+        ServiceCharge serviceCharge = unionAffiliation.getServiceCharge(20220412);
+        Assertions.assertNotNull(serviceCharge);
+        Assertions.assertEquals(12.95, serviceCharge.getAmount());
     }
 }
