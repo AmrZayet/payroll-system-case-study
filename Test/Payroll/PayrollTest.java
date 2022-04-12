@@ -123,5 +123,24 @@ public class PayrollTest {
         Assertions.assertEquals(8.0, timeCard.getHoursCount());
     }
 
+    @Test
+    public void TestSalesReceiptTransaction() {
+        int empId = 6;
+        AddCommissionedEmployee t = new AddCommissionedEmployee(empId, "Andy", "Home6", 2500.00, 5.00);
+        t.execute();
+
+        SalesReceiptTransaction tct = new SalesReceiptTransaction(empId, 20220412, 500.00);
+        tct.execute();
+
+        Employee employee = PayrollDatabase.getEmployee(empId);
+        Assertions.assertNotNull(employee);
+
+        CommissionedClassification commissionedClassification = (CommissionedClassification) employee.getPaymentClassification();
+
+        SalesReceipt salesReceipt = commissionedClassification.getSalesReceipt(20220412);
+        Assertions.assertNotNull(salesReceipt);
+        Assertions.assertEquals(500.0, salesReceipt.getAmount());
+    }
+
 
 }
