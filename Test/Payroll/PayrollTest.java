@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 public class PayrollTest {
 
     PayrollDatabase payrollDatabase = new PayrollDatabase();
+
     @Test
     public void TestAddSalariedEmployee() {
         int empId = 1;
@@ -29,15 +30,13 @@ public class PayrollTest {
     }
 
     @Test
-    public void TestSearchingNonexistentEmployee()
-    {
+    public void TestSearchingNonexistentEmployee() {
         Employee employee = PayrollDatabase.getEmployee(2);
         Assertions.assertNull(employee);
     }
 
     @Test
-    public void TestAddHourlyEmployee()
-    {
+    public void TestAddHourlyEmployee() {
         int empId = 2;
         AddHourlyEmployee t = new AddHourlyEmployee(empId, "Mark", "Home2", 15.00);
         t.execute();
@@ -63,8 +62,7 @@ public class PayrollTest {
     }
 
     @Test
-    public void TestAddCommissionedEmployee()
-    {
+    public void TestAddCommissionedEmployee() {
         int empId = 3;
         AddCommissionedEmployee t = new AddCommissionedEmployee(empId, "Brian", "Home3", 1500.00, 5.00);
         t.execute();
@@ -90,8 +88,7 @@ public class PayrollTest {
     }
 
     @Test
-    public void TestDeleteEmployee()
-    {
+    public void TestDeleteEmployee() {
         int empId = 4;
         AddSalariedEmployee t = new AddSalariedEmployee(empId, "Martin", "Home4", 2000.00);
         t.execute();
@@ -105,4 +102,26 @@ public class PayrollTest {
         Employee employee1 = PayrollDatabase.getEmployee(empId);
         Assertions.assertNull(employee1);
     }
+
+    @Test
+    public void TestTimeCard() {
+        int empId = 5;
+        AddHourlyEmployee t = new AddHourlyEmployee(empId, "Sarah", "Home5", 15.00);
+        t.execute();
+
+        TimeCardTransaction tct = new TimeCardTransaction(empId, 20220412, 8.0);
+        tct.execute();
+
+        Employee employee = PayrollDatabase.getEmployee(empId);
+        Assertions.assertNotNull(employee);
+
+        PaymentClassification paymentClassification = employee.getPaymentClassification();
+        HourlyClassification hourlyClassification = (HourlyClassification) paymentClassification;
+
+        TimeCard timeCard = hourlyClassification.getTimeCard(20220412);
+        Assertions.assertNotNull(timeCard);
+        Assertions.assertEquals(8.0, timeCard.getHoursCount());
+    }
+
+
 }
