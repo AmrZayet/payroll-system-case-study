@@ -148,10 +148,13 @@ public class PayrollTest {
         AddSalariedEmployee t = new AddSalariedEmployee(empId,"Robbin", "Home7", 2500.00);
         t.execute();
 
-        SetAffiliationTransaction sat = new SetAffiliationTransaction(empId, 12.5);
+        int memberId = 86;
+        SetAffiliationTransaction sat = new SetAffiliationTransaction(empId, memberId, 12.5);
         sat.execute();
 
         Employee employee = PayrollDatabase.getEmployee(empId);
+        Employee employee1 = PayrollDatabase.getUnionMember(memberId);
+        Assertions.assertEquals(employee, employee1);
 
         Affiliation affiliation = employee.getAffiliation();
         UnionAffiliation unionAffiliation = (UnionAffiliation) affiliation;
