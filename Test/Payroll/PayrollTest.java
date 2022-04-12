@@ -182,4 +182,15 @@ public class PayrollTest {
         Assertions.assertNotNull(serviceCharge);
         Assertions.assertEquals(12.95, serviceCharge.getAmount());
     }
+
+    @Test
+    public void TestAddServiceChargeWithNonAffiliatedEmployee() {
+        int memberId = 88;
+
+        ServiceChargeTransaction sct = new ServiceChargeTransaction(memberId, 20220412, 12.95);
+        sct.execute();
+
+        Employee employee = PayrollDatabase.getUnionMember(memberId);
+        Assertions.assertNull(employee);
+    }
 }

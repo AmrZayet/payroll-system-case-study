@@ -23,7 +23,7 @@ public class ServiceChargeTransaction implements Transaction {
                 System.err.println("Tried to add service charge to non-Affiliated employee");
             }
         } else {
-            System.err.println("No such employee");
+            System.err.println("No such employee with this memberId.");
         }
 
 
