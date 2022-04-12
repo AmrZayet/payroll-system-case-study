@@ -142,5 +142,20 @@ public class PayrollTest {
         Assertions.assertEquals(500.0, salesReceipt.getAmount());
     }
 
+    @Test
+    public void TestSetAffiliationTransaction() {
+        int empId = 7;
+        AddSalariedEmployee t = new AddSalariedEmployee(empId,"Robbin", "Home7", 2500.00);
+        t.execute();
 
+        SetAffiliationTransaction sat = new SetAffiliationTransaction(empId, 12.5);
+        sat.execute();
+
+        Employee employee = PayrollDatabase.getEmployee(empId);
+
+        Affiliation affiliation = employee.getAffiliation();
+        UnionAffiliation unionAffiliation = (UnionAffiliation) affiliation;
+
+        Assertions.assertEquals(12.5, unionAffiliation.getDues());
+    }
 }
