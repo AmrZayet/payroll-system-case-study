@@ -292,8 +292,8 @@ public class PayrollTest {
     @Test
     public void TestChangeHourlyRateForHourLyRatedEmployee() {
         int empId = 28;
-        AddHourlyEmployee t1 = new AddHourlyEmployee(empId, "John", "Home28", 20.0);
-        t1.execute();
+        AddHourlyEmployee t = new AddHourlyEmployee(empId, "John", "Home28", 20.0);
+        t.execute();
 
         ChangeEmployeeHourlyRate cehr = new ChangeEmployeeHourlyRate(empId, 30.00);
         cehr.execute();
@@ -319,4 +319,58 @@ public class PayrollTest {
         ChangeEmployeeHourlyRate cehr2 = new ChangeEmployeeHourlyRate(empId2, 35.00);
         cehr2.execute();
     }
+
+    @Test
+    public void TestChangeSalariedClassificationTransaction() {
+        int empId = 40;
+        AddHourlyEmployee t = new AddHourlyEmployee(empId, "Steven", "Home40", 20.0);
+        t.execute();
+
+        ChangeSalariedClassification csc = new ChangeSalariedClassification(empId, 5000.00);
+        csc.execute();
+
+        Employee employee = PayrollDatabase.getEmployee(empId);
+        SalariedClassification salariedClassification = (SalariedClassification) employee.getPaymentClassification();
+        Assertions.assertEquals(5000.00, salariedClassification.getSalary());
+
+        PaymentSchedule paymentSchedule = employee.getPaymentSchedule();
+        Assertions.assertTrue((paymentSchedule instanceof MonthlySchedule));
+    }
+
+    @Test
+    public void TestChangeHourlyClassificationTransaction() {
+        int empId = 41;
+        AddSalariedEmployee t = new AddSalariedEmployee(empId, "David", "Home41", 6000.00);
+        t.execute();
+
+        ChangeHourlyClassification chc = new ChangeHourlyClassification(empId, 60.00);
+        chc.execute();
+
+        Employee employee = PayrollDatabase.getEmployee(empId);
+        HourlyClassification hourlyClassification = (HourlyClassification) employee.getPaymentClassification();
+        Assertions.assertEquals(60.00, hourlyClassification.getHourlyRate());
+
+        PaymentSchedule paymentSchedule = employee.getPaymentSchedule();
+        Assertions.assertTrue((paymentSchedule instanceof WeeklySchedule));
+    }
+
+    @Test
+    public void TestChangeCommissionedClassificationTransaction() {
+        int empId = 42;
+        AddSalariedEmployee t = new AddSalariedEmployee(empId, "Hunter", "Home42", 5500.00);
+        t.execute();
+
+        ChangeCommissionedClassification ccc = new ChangeCommissionedClassification(empId, 4500.00, 10.00);
+        ccc.execute();
+
+        Employee employee = PayrollDatabase.getEmployee(empId);
+        CommissionedClassification commissionedClassification = (CommissionedClassification) employee.getPaymentClassification();
+        Assertions.assertEquals(4500.00, commissionedClassification.getSalary());
+        Assertions.assertEquals(10.00, commissionedClassification.getCommissionRate());
+
+        PaymentSchedule paymentSchedule = employee.getPaymentSchedule();
+        Assertions.assertTrue((paymentSchedule instanceof BiweeklySchedule));
+    }
+
+
 }
