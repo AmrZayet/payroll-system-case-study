@@ -9,8 +9,13 @@ public abstract class ChangeEmployeeTransaction implements Transaction {
 
     @Override
     public void execute() {
-        change();
+        Employee employee = PayrollDatabase.getEmployee(transactionEmployeeId);
+        if (employee != null) {
+            change(employee);
+        } else {
+            System.err.println("Can't Change the employee because there is no employee with this ID");
+        }
     }
 
-    public abstract void change();
+    public abstract void change(Employee employee);
 }

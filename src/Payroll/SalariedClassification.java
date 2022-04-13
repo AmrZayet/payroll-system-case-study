@@ -1,13 +1,17 @@
 package Payroll;
 
 public class SalariedClassification implements PaymentClassification {
-    double employeeSalary;
+    double salary;
 
-    public SalariedClassification(double employeeSalary) {
-        this.employeeSalary = employeeSalary;
+    public SalariedClassification(double salary) {
+        this.salary = salary;
+    }
+
+    public void setSalary(double salary) {
+        this.salary = salary;
     }
 
     public double getSalary() {
-        return employeeSalary;
+        return salary;
     }
 }

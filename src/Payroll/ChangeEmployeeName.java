@@ -10,12 +10,7 @@ public class ChangeEmployeeName extends ChangeEmployeeTransaction {
 
 
     @Override
-    public void change() {
-        Employee employee = PayrollDatabase.getEmployee(transactionEmployeeId);
-        if (employee != null) {
-            employee.setName(transactionEmployeeName);
-        } else {
-            System.err.println("Can't Change the name because here is no employee with this ID");
-        }
+    public void change(Employee employee) {
+        employee.setName(transactionEmployeeName);
     }
 }

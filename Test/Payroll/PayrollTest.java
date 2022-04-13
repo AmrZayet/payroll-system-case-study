@@ -219,4 +219,41 @@ public class PayrollTest {
         Employee employee = PayrollDatabase.getEmployee(empId);
         Assertions.assertEquals("newHome21", employee.getAddress());
     }
+
+    @Test
+    public void TestChangeEmployeeSalaryTransactionForSalariedEmployee() {
+        int empId = 22;
+        AddSalariedEmployee t = new AddSalariedEmployee(empId, "Sally", "Home22", 4000.00);
+        t.execute();
+
+        ChangeEmployeeSalary ces = new ChangeEmployeeSalary(empId, 5000.00);
+        ces.execute();
+
+        Employee employee = PayrollDatabase.getEmployee(empId);
+        SalariedClassification salariedClassification = (SalariedClassification) employee.getPaymentClassification();
+        Assertions.assertEquals(5000.00, salariedClassification.getSalary());
+    }
+
+    @Test
+    public void TestChangeEmployeeSalaryTransactionForCommissionedEmployee() {
+        int empId = 23;
+        AddCommissionedEmployee t = new AddCommissionedEmployee(empId, "Josh", "Home23", 4200.00, 5.00);
+        t.execute();
+
+        ChangeEmployeeSalary ces = new ChangeEmployeeSalary(empId, 6000.00);
+        ces.execute();
+
+        Employee employee = PayrollDatabase.getEmployee(empId);
+        CommissionedClassification commissionedClassification = (CommissionedClassification) employee.getPaymentClassification();
+        Assertions.assertEquals(6000.00, commissionedClassification.getSalary());
+    }
+
+    @Test void TestChangeEmployeeSalaryTransactionForWrongTypeEmployee() {
+        int empId = 24;
+        AddHourlyEmployee t = new AddHourlyEmployee(empId, "Marly", "Home24", 16.0);
+        t.execute();
+
+        ChangeEmployeeSalary ces = new ChangeEmployeeSalary(empId, 3000.0);
+        ces.execute();
+    }
 }

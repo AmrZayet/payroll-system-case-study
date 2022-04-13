@@ -10,12 +10,7 @@ public class ChangeEmployeeAddress extends ChangeEmployeeTransaction{
 
 
     @Override
-    public void change() {
-        Employee employee = PayrollDatabase.getEmployee(transactionEmployeeId);
-        if (employee != null) {
-            employee.setAddress(transactionEmployeeAddress);
-        } else {
-            System.err.println("\"Can't Change the address because here is no employee with this ID\"");
-        }
+    public void change(Employee employee) {
+        employee.setAddress(transactionEmployeeAddress);
     }
 }

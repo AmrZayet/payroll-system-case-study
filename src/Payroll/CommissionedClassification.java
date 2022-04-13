@@ -22,6 +22,14 @@ public class CommissionedClassification implements PaymentClassification {
         return salesReceipts.get(date);
     }
 
+    public void setSalary(double salary) {
+        this.salary = salary;
+    }
+
+    public void setCommissionRate(double commissionRate) {
+        this.commissionRate = commissionRate;
+    }
+
     public double getSalary() {
         return salary;
     }
