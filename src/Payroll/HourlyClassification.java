@@ -12,6 +12,10 @@ public class HourlyClassification implements PaymentClassification {
         this.hourlyRate = hourlyRate;
     }
 
+    public void setHourlyRate(double hourlyRate) {
+        this.hourlyRate = hourlyRate;
+    }
+
     public double getHourlyRate() {
         return hourlyRate;
     }
