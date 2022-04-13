@@ -16,16 +16,12 @@ public class Employee {
         this.address = address;
     }
 
-    public int getId() {
-        return id;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public String getAddress() {
-        return address;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public void setPaymentClassification(PaymentClassification paymentClassification) {
@@ -38,6 +34,22 @@ public class Employee {
 
     public void setPaymentMethod(PaymentMethod paymentMethod) {
         this.paymentMethod = paymentMethod;
+    }
+
+    public void setAffiliation(Affiliation affiliation) {
+        this.affiliation = affiliation;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getAddress() {
+        return address;
     }
 
     public PaymentClassification getPaymentClassification() {
@@ -54,9 +66,5 @@ public class Employee {
 
     public Affiliation getAffiliation() {
         return affiliation;
-    }
-
-    public void setAffiliation(Affiliation affiliation) {
-        this.affiliation = affiliation;
     }
 }

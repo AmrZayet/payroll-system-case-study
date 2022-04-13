@@ -185,12 +185,38 @@ public class PayrollTest {
 
     @Test
     public void TestAddServiceChargeWithNonAffiliatedEmployee() {
-        int memberId = 88;
+        int memberId = 89;
 
         ServiceChargeTransaction sct = new ServiceChargeTransaction(memberId, 20220412, 12.95);
         sct.execute();
 
         Employee employee = PayrollDatabase.getUnionMember(memberId);
         Assertions.assertNull(employee);
+    }
+
+    @Test
+    public void TestChangeEmployeeNameTransaction() {
+        int empId = 20;
+        AddSalariedEmployee t = new AddSalariedEmployee(empId, "Ramy", "Home20", 2000.0);
+        t.execute();
+
+        ChangeEmployeeName cen = new ChangeEmployeeName(empId, "Bradly");
+        cen.execute();
+
+        Employee employee = PayrollDatabase.getEmployee(empId);
+        Assertions.assertEquals("Bradly", employee.getName());
+    }
+
+    @Test
+    public void TestChangeEmployeeAddressTransaction() {
+        int empId = 21;
+        AddHourlyEmployee t = new AddHourlyEmployee(empId, "Lisa", "Home21", 16.00);
+        t.execute();
+
+        ChangeEmployeeAddress cea = new ChangeEmployeeAddress(empId, "newHome21");
+        cea.execute();
+
+        Employee employee = PayrollDatabase.getEmployee(empId);
+        Assertions.assertEquals("newHome21", employee.getAddress());
     }
 }
