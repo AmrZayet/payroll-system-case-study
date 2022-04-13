@@ -25,8 +25,8 @@ public class PayrollTest {
         Assertions.assertNotNull(monthlySchedule);
 
         PaymentMethod paymentMethod = employee.getPaymentMethod();
-        HoldMethod holdMethod = (HoldMethod) paymentMethod;
-        Assertions.assertNotNull(holdMethod);
+        HoldPaymentMethod holdPaymentMethod = (HoldPaymentMethod) paymentMethod;
+        Assertions.assertNotNull(holdPaymentMethod);
     }
 
     @Test
@@ -57,8 +57,8 @@ public class PayrollTest {
         Assertions.assertNotNull(weeklySchedule);
 
         PaymentMethod paymentMethod = employee.getPaymentMethod();
-        HoldMethod holdMethod = (HoldMethod) paymentMethod;
-        Assertions.assertNotNull(holdMethod);
+        HoldPaymentMethod holdPaymentMethod = (HoldPaymentMethod) paymentMethod;
+        Assertions.assertNotNull(holdPaymentMethod);
     }
 
     @Test
@@ -83,8 +83,8 @@ public class PayrollTest {
         Assertions.assertNotNull(biweeklySchedule);
 
         PaymentMethod paymentMethod = employee.getPaymentMethod();
-        HoldMethod holdMethod = (HoldMethod) paymentMethod;
-        Assertions.assertNotNull(holdMethod);
+        HoldPaymentMethod holdPaymentMethod = (HoldPaymentMethod) paymentMethod;
+        Assertions.assertNotNull(holdPaymentMethod);
     }
 
     @Test
@@ -372,5 +372,50 @@ public class PayrollTest {
         Assertions.assertTrue((paymentSchedule instanceof BiweeklySchedule));
     }
 
+    @Test
+    public void TestChangePaymentMethodToDirectMethod() {
+        int empId = 50;
+        AddSalariedEmployee t = new AddSalariedEmployee(empId, "Harry", "Home50", 2000.00);
+        t.execute();
 
+        ChangeDirectPaymentMethodTransaction cdpm = new ChangeDirectPaymentMethodTransaction(empId);
+        cdpm.execute();
+
+        Employee employee = PayrollDatabase.getEmployee(empId);
+        PaymentMethod paymentMethod = employee.getPaymentMethod();
+        Assertions.assertTrue(paymentMethod instanceof DirectPaymentMethod);
+    }
+
+    @Test
+    public void TestChangePaymentMethodToMailMethod() {
+        int empId = 51;
+        AddSalariedEmployee t = new AddSalariedEmployee(empId, "Garry", "Home51", 8000.00);
+        t.execute();
+
+        ChangeMailPaymentMethodTransaction cmpm = new ChangeMailPaymentMethodTransaction(empId);
+        cmpm.execute();
+
+        Employee employee = PayrollDatabase.getEmployee(empId);
+        PaymentMethod paymentMethod = employee.getPaymentMethod();
+        Assertions.assertTrue(paymentMethod instanceof MailPaymentMethod);
+    }
+
+    @Test
+    public void TestChangePaymentMethodToHoldMethod() {
+        int empId = 52;
+        AddHourlyEmployee t = new AddHourlyEmployee(empId, "Gerard", "Home52", 70.00);
+        t.execute();
+
+        ChangeMailPaymentMethodTransaction cmpm = new ChangeMailPaymentMethodTransaction(empId);
+        cmpm.execute();
+
+        Employee employee = PayrollDatabase.getEmployee(empId);
+        PaymentMethod paymentMethod = employee.getPaymentMethod();
+        Assertions.assertTrue(paymentMethod instanceof MailPaymentMethod);
+
+        ChangeHoldPaymentMethodTransaction chpm = new ChangeHoldPaymentMethodTransaction(empId);
+        chpm.execute();
+        paymentMethod = employee.getPaymentMethod();
+        Assertions.assertTrue(paymentMethod instanceof HoldPaymentMethod);
+    }
 }
