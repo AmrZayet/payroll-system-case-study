@@ -378,12 +378,16 @@ public class PayrollTest {
         AddSalariedEmployee t = new AddSalariedEmployee(empId, "Harry", "Home50", 2000.00);
         t.execute();
 
-        ChangeDirectPaymentMethodTransaction cdpm = new ChangeDirectPaymentMethodTransaction(empId);
+        ChangeDirectPaymentMethodTransaction cdpm = new ChangeDirectPaymentMethodTransaction(empId, "Bank of America", "50505050");
         cdpm.execute();
 
         Employee employee = PayrollDatabase.getEmployee(empId);
         PaymentMethod paymentMethod = employee.getPaymentMethod();
         Assertions.assertTrue(paymentMethod instanceof DirectPaymentMethod);
+
+        DirectPaymentMethod directPaymentMethod = (DirectPaymentMethod) paymentMethod;
+        Assertions.assertEquals("Bank of America", directPaymentMethod.getEmployeeBank());
+        Assertions.assertEquals("50505050", directPaymentMethod.getEmployeeAccountNumber());
     }
 
     @Test
@@ -392,12 +396,15 @@ public class PayrollTest {
         AddSalariedEmployee t = new AddSalariedEmployee(empId, "Garry", "Home51", 8000.00);
         t.execute();
 
-        ChangeMailPaymentMethodTransaction cmpm = new ChangeMailPaymentMethodTransaction(empId);
+        ChangeMailPaymentMethodTransaction cmpm = new ChangeMailPaymentMethodTransaction(empId, "Home51 MailBox");
         cmpm.execute();
 
         Employee employee = PayrollDatabase.getEmployee(empId);
         PaymentMethod paymentMethod = employee.getPaymentMethod();
         Assertions.assertTrue(paymentMethod instanceof MailPaymentMethod);
+
+        MailPaymentMethod mailPaymentMethod = (MailPaymentMethod) paymentMethod;
+        Assertions.assertEquals("Home51 MailBox", mailPaymentMethod.getEmployeeMailAddress());
     }
 
     @Test
@@ -406,7 +413,7 @@ public class PayrollTest {
         AddHourlyEmployee t = new AddHourlyEmployee(empId, "Gerard", "Home52", 70.00);
         t.execute();
 
-        ChangeMailPaymentMethodTransaction cmpm = new ChangeMailPaymentMethodTransaction(empId);
+        ChangeMailPaymentMethodTransaction cmpm = new ChangeMailPaymentMethodTransaction(empId, "Home52 MailBox");
         cmpm.execute();
 
         Employee employee = PayrollDatabase.getEmployee(empId);

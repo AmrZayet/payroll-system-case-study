@@ -1,12 +1,15 @@
 package Payroll;
 
 public class ChangeMailPaymentMethodTransaction extends ChangePaymentMethodTransaction {
-    public ChangeMailPaymentMethodTransaction(int transactionEmployeeId) {
+    String transactionEmployeeMailAddress;
+
+    public ChangeMailPaymentMethodTransaction(int transactionEmployeeId, String transactionEmployeeMailAddress) {
         super(transactionEmployeeId);
+        this.transactionEmployeeMailAddress = transactionEmployeeMailAddress;
     }
 
     @Override
     public PaymentMethod getPaymentMethod() {
-        return new MailPaymentMethod();
+        return new MailPaymentMethod(transactionEmployeeMailAddress);
     }
 }
