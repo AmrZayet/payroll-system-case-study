@@ -1,4 +1,4 @@
 package Payroll;
 
-public class Affiliation {
+public abstract class Affiliation {
 }

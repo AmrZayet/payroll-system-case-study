@@ -149,7 +149,7 @@ public class PayrollTest {
         t.execute();
 
         int memberId = 87;
-        SetAffiliationTransaction sat = new SetAffiliationTransaction(empId, memberId, 12.5);
+        ChangeMemberTransaction sat = new ChangeMemberTransaction(empId, memberId, 12.5);
         sat.execute();
 
         Employee employee = PayrollDatabase.getEmployee(empId);
@@ -170,7 +170,7 @@ public class PayrollTest {
         t.execute();
 
         int memberId = 88;
-        SetAffiliationTransaction sat = new SetAffiliationTransaction(empId, memberId, 12.0);
+        ChangeMemberTransaction sat = new ChangeMemberTransaction(empId, memberId, 12.0);
         sat.execute();
 
         ServiceChargeTransaction sct = new ServiceChargeTransaction(memberId, 20220412, 12.95);
@@ -424,5 +424,25 @@ public class PayrollTest {
         chpm.execute();
         paymentMethod = employee.getPaymentMethod();
         Assertions.assertTrue(paymentMethod instanceof HoldPaymentMethod);
+    }
+
+    @Test
+    public void TestChangeMemberToAffiliatedTransaction() {
+        int empId = 53;
+        AddHourlyEmployee t = new AddHourlyEmployee(empId, "Nathan", "Home53", 60.00);
+        t.execute();
+
+        int memberId = 153;
+        ChangeMemberTransaction sat = new ChangeMemberTransaction(empId, memberId, 12.5);
+        sat.execute();
+
+        Employee employee = PayrollDatabase.getEmployee(empId);
+        Employee employee1 = PayrollDatabase.getUnionMember(memberId);
+        Assertions.assertEquals(employee, employee1);
+
+        Affiliation affiliation = employee.getAffiliation();
+        UnionAffiliation unionAffiliation = (UnionAffiliation) affiliation;
+
+        Assertions.assertEquals(12.5, unionAffiliation.getDues());
     }
 }
