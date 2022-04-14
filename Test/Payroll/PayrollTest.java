@@ -442,7 +442,46 @@ public class PayrollTest {
 
         Affiliation affiliation = employee.getAffiliation();
         UnionAffiliation unionAffiliation = (UnionAffiliation) affiliation;
-
         Assertions.assertEquals(12.5, unionAffiliation.getDues());
+        Assertions.assertEquals(memberId, unionAffiliation.getMemberId());
+    }
+
+    @Test
+    public void TestChangeMemberFromUnionToNonAffiliated() {
+        int empId = 54;
+        AddHourlyEmployee t = new AddHourlyEmployee(empId, "Hannah", "Home54", 60.00);
+        t.execute();
+
+        int memberId = 154;
+        ChangeMemberTransaction sat = new ChangeMemberTransaction(empId, memberId, 12.5);
+        sat.execute();
+
+        ChangeUnaffiliatedTransaction suat = new ChangeUnaffiliatedTransaction(empId);
+        suat.execute();
+
+        Employee employee = PayrollDatabase.getEmployee(empId);
+        Affiliation affiliation = employee.getAffiliation();
+        Assertions.assertTrue(affiliation instanceof NoAffiliation);
+
+        Employee employee1 = PayrollDatabase.getUnionMember(memberId);
+        Assertions.assertNull(employee1);
+    }
+
+    @Test
+    public void TestChangeMemberFromNonAffiliatedToNonAffiliatedTransaction() {
+        int empId = 55;
+        AddHourlyEmployee t = new AddHourlyEmployee(empId, "Carla", "Home55", 100.00);
+        t.execute();
+
+        int memberId = 155;
+        ChangeUnaffiliatedTransaction sat = new ChangeUnaffiliatedTransaction(empId);
+        sat.execute();
+
+        Employee employee = PayrollDatabase.getEmployee(empId);
+        Affiliation affiliation = employee.getAffiliation();
+        Assertions.assertTrue(affiliation instanceof NoAffiliation);
+
+        Employee employee1 = PayrollDatabase.getUnionMember(memberId);
+        Assertions.assertNull(employee1);
     }
 }

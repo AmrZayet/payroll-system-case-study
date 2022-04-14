@@ -7,8 +7,8 @@ public abstract class ChangeAffiliationTransaction extends ChangeEmployeeTransac
 
     @Override
     public void change(Employee employee) {
-        employee.setAffiliation(getNewAffiliation());
         recordUnionMembership(employee);
+        employee.setAffiliation(getNewAffiliation());
     }
 
     public abstract Affiliation getNewAffiliation();

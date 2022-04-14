@@ -12,7 +12,7 @@ public class ChangeMemberTransaction extends ChangeAffiliationTransaction {
 
     @Override
     public Affiliation getNewAffiliation() {
-        return new UnionAffiliation(transactionDues);
+        return new UnionAffiliation(transactionMemberId, transactionDues);
     }
 
     @Override

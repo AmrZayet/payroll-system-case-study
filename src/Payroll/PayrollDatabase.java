@@ -24,6 +24,10 @@ public class PayrollDatabase {
         unionMembers.put(memberId, employee);
     }
 
+    public static void deleteUnionMember(int memberId) {
+        unionMembers.remove(memberId);
+    }
+
     public static Employee getUnionMember(int memberId) {
         return unionMembers.get(memberId);
     }
