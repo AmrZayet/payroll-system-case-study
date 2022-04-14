@@ -484,4 +484,15 @@ public class PayrollTest {
         Employee employee1 = PayrollDatabase.getUnionMember(memberId);
         Assertions.assertNull(employee1);
     }
+
+    @Test
+    public void TestDefaultNoAffiliationForNewlyAddedEmployee() {
+        int empId = 56;
+        AddSalariedEmployee t = new AddSalariedEmployee(empId, "Carla", "Home56", 8000.00);
+        t.execute();
+
+        Employee employee = PayrollDatabase.getEmployee(empId);
+        Affiliation affiliation = employee.getAffiliation();
+        Assertions.assertTrue(affiliation instanceof NoAffiliation);
+    }
 }

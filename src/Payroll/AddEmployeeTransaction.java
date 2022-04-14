@@ -1,9 +1,6 @@
 package Payroll;
 
 public abstract class AddEmployeeTransaction implements Transaction {
-//    PaymentClassification paymentClassification;
-//    PaymentSchedule paymentSchedule;
-
     int transactionEmployeeId;
     String transactionEmployeeName;
     String transactionEmployeeAddress;
@@ -24,8 +21,13 @@ public abstract class AddEmployeeTransaction implements Transaction {
         newEmployee.setPaymentClassification(paymentClassification);
         newEmployee.setPaymentSchedule(paymentSchedule);
         newEmployee.setPaymentMethod(paymentMethod);
+        newEmployee.setAffiliation(getDefaultAffiliation());
 
         PayrollDatabase.addEmployee(transactionEmployeeId, newEmployee);
+    }
+
+    public Affiliation getDefaultAffiliation() {
+        return new NoAffiliation();
     }
 
     public abstract PaymentClassification getClassification();
