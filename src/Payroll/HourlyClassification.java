@@ -28,4 +28,8 @@ public class HourlyClassification implements PaymentClassification {
         return timeCards.get(date);
     }
 
+    @Override
+    public double calculatePay(WorkCalendar payDate) {
+        return 0;
+    }
 }

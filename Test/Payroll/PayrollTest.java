@@ -3,6 +3,8 @@ package Payroll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.util.Calendar;
+
 public class PayrollTest {
 
     PayrollDatabase payrollDatabase = new PayrollDatabase();
@@ -494,5 +496,78 @@ public class PayrollTest {
         Employee employee = PayrollDatabase.getEmployee(empId);
         Affiliation affiliation = employee.getAffiliation();
         Assertions.assertTrue(affiliation instanceof NoAffiliation);
+    }
+
+    @Test
+    public void TestIsPayDayWithMonthlySchedule() {
+        WorkCalendar payDate = new WorkCalendar(2022, Calendar.MARCH, 30);
+        MonthlySchedule monthlySchedule = new MonthlySchedule();
+
+        Assertions.assertFalse(monthlySchedule.isPayDay(payDate));
+    }
+
+    @Test
+    public void TestIsPayDayWithMonthlyScheduleOnWrongDate() {
+        WorkCalendar payDate = new WorkCalendar(2022, Calendar.MARCH, 31);
+        MonthlySchedule monthlySchedule = new MonthlySchedule();
+
+        Assertions.assertTrue(monthlySchedule.isPayDay(payDate));
+    }
+
+    @Test
+    public void TestPaySingleSalariedEmployee() {
+        PayrollDatabase.clearDatabase();
+
+        int empId = 100;
+        AddSalariedEmployee t = new AddSalariedEmployee(empId, "Sandy", "Home100", 9000.00);
+        t.execute();
+
+        WorkCalendar payDate = new WorkCalendar(2022, Calendar.FEBRUARY, 28);
+        PayDayTransaction pdt = new PayDayTransaction(payDate);
+        pdt.execute();
+        Assertions.assertEquals(9000.00, pdt.getTotalPay());
+
+//        PayCheck payCheck = pdt.getPayCheck(empId);
+//        Assertions.assertNotNull(payCheck);
+//        Assertions.assertEquals(payDate, payCheck.getPayDate());
+//        Assertions.assertEquals(9000.00, payCheck.getGrossPay(), 0.001);
+//        Assertions.assertEquals("Hold", payCheck.getField("Disposition"));
+//        Assertions.assertEquals(0.00, payCheck.getDeductions(), 0.001);
+//        Assertions.assertEquals(9000.00, getNetPay(), 0.001);
+    }
+
+    @Test
+    public void TestPaySingleSalariedEmployeeOnWrongDate() {
+        PayrollDatabase.clearDatabase();
+
+        int empId = 101;
+        AddSalariedEmployee t = new AddSalariedEmployee(empId, "Sarah", "Home101", 9500.00);
+        t.execute();
+
+        WorkCalendar payDate = new WorkCalendar(2022, Calendar.FEBRUARY, 20);
+        PayDayTransaction pdt = new PayDayTransaction(payDate);
+        pdt.execute();
+        Assertions.assertEquals(0.00, pdt.getTotalPay(), 0.001);
+
+//        PayCheck payCheck = pdt.getPayCheck(empId);
+//        Assertions.assertNull(payCheck);
+    }
+
+    @Test
+    public void TestPayMultipleSalariedEmployees() {
+        PayrollDatabase.clearDatabase();
+
+        int empId1 = 102;
+        AddSalariedEmployee t1 = new AddSalariedEmployee(empId1, "Sandy", "Home102", 9000.00);
+        t1.execute();
+
+        int empId2 = 103;
+        AddSalariedEmployee t2 = new AddSalariedEmployee(empId2, "Mark", "Home103", 8000.00);
+        t2.execute();
+
+        WorkCalendar payDate = new WorkCalendar(2022, Calendar.APRIL, 30);
+        PayDayTransaction pdt = new PayDayTransaction(payDate);
+        pdt.execute();
+        Assertions.assertEquals(17000.00, pdt.getTotalPay());
     }
 }

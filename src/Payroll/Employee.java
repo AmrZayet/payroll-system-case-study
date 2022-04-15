@@ -67,4 +67,12 @@ public class Employee {
     public Affiliation getAffiliation() {
         return affiliation;
     }
+
+    public double calculatePay(WorkCalendar payDate) {
+        if (paymentSchedule.isPayDay(payDate)) {
+            return paymentClassification.calculatePay(payDate);
+        } else {
+            return 0.00;
+        }
+    }
 }

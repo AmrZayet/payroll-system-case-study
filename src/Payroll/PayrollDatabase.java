@@ -1,6 +1,7 @@
 package Payroll;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 public class PayrollDatabase {
@@ -34,5 +35,9 @@ public class PayrollDatabase {
 
     public static void clearDatabase() {
         employees.clear();
+    }
+
+    public static Iterator<Map.Entry<Integer, Employee>> getEmployeesIterator()  {
+        return employees.entrySet().iterator();
     }
 }

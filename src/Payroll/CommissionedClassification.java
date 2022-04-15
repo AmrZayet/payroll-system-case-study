@@ -37,4 +37,9 @@ public class CommissionedClassification implements PaymentClassification {
     public double getCommissionRate() {
         return commissionRate;
     }
+
+    @Override
+    public double calculatePay(WorkCalendar payDate) {
+        return 0;
+    }
 }
