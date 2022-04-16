@@ -16,7 +16,7 @@ public class SalariedClassification implements PaymentClassification {
     }
 
     @Override
-    public double calculatePay(WorkCalendar payDate) {
+    public double calculatePay(WorkCalendar paymentPeriodStartDate, WorkCalendar payDate) {
         return getSalary();
     }
 }

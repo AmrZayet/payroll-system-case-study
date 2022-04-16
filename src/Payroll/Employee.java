@@ -70,7 +70,8 @@ public class Employee {
 
     public double calculatePay(WorkCalendar payDate) {
         if (paymentSchedule.isPayDay(payDate)) {
-            return paymentClassification.calculatePay(payDate);
+            WorkCalendar paymentPeriodStartDate = paymentSchedule.getPaymentPeriodStartDate(payDate);
+            return paymentClassification.calculatePay(paymentPeriodStartDate, payDate);
         } else {
             return 0.00;
         }

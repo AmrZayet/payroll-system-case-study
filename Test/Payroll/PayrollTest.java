@@ -111,7 +111,9 @@ public class PayrollTest {
         AddHourlyEmployee t = new AddHourlyEmployee(empId, "Sarah", "Home5", 15.00);
         t.execute();
 
-        TimeCardTransaction tct = new TimeCardTransaction(empId, 20220412, 8.0);
+
+        WorkCalendar dayDate = new WorkCalendar(2022, Calendar.APRIL, 12);
+        TimeCardTransaction tct = new TimeCardTransaction(empId, dayDate, 8.0);
         tct.execute();
 
         Employee employee = PayrollDatabase.getEmployee(empId);
@@ -120,7 +122,7 @@ public class PayrollTest {
         PaymentClassification paymentClassification = employee.getPaymentClassification();
         HourlyClassification hourlyClassification = (HourlyClassification) paymentClassification;
 
-        TimeCard timeCard = hourlyClassification.getTimeCard(20220412);
+        TimeCard timeCard = hourlyClassification.getTimeCard(dayDate);
         Assertions.assertNotNull(timeCard);
         Assertions.assertEquals(8.0, timeCard.getHoursCount());
     }
@@ -570,4 +572,129 @@ public class PayrollTest {
         pdt.execute();
         Assertions.assertEquals(17000.00, pdt.getTotalPay());
     }
+
+    @Test
+    public void TestPaySingleHourlyEmployeeOneTimeCard() {
+        PayrollDatabase.clearDatabase();
+
+        int empId = 104;
+        AddHourlyEmployee t = new AddHourlyEmployee(empId, "Matt", "Home 104", 20.00);
+        t.execute();
+
+        WorkCalendar dayDate = new WorkCalendar(2022, Calendar.APRIL, 15); //Friday
+        TimeCardTransaction tct = new TimeCardTransaction(empId, dayDate, 2.00);
+        tct.execute();
+
+        PayDayTransaction pdt = new PayDayTransaction(dayDate);
+        pdt.execute();
+        Assertions.assertEquals(40.00, pdt.getTotalPay(), 0.001);
+    }
+
+    @Test
+    public void TestPaySingleHourlyEmployeeOnWrongDate() {
+        int empId = 105;
+        AddHourlyEmployee t = new AddHourlyEmployee(empId, "Damon", "Home 105", 20.00);
+        t.execute();
+
+        WorkCalendar dayDate = new WorkCalendar(2022, Calendar.APRIL, 15);
+        TimeCardTransaction tct = new TimeCardTransaction(empId, dayDate, 2.00);
+        tct.execute();
+
+        WorkCalendar payDate = new WorkCalendar(2022, Calendar.APRIL, 20); //Wednesday
+        PayDayTransaction pdt = new PayDayTransaction(payDate);
+        pdt.execute();
+        Assertions.assertEquals(0.00, pdt.getTotalPay(), 0.001);
+    }
+
+    @Test
+    public void TestPaySingleHourlyEmployeeOneTimeCardWithOvertime() {
+        PayrollDatabase.clearDatabase();
+
+        int empId = 104;
+        AddHourlyEmployee t = new AddHourlyEmployee(empId, "Matt", "Home 104", 20.00);
+        t.execute();
+
+        WorkCalendar dayDate = new WorkCalendar(2022, Calendar.APRIL, 15); //Friday
+        TimeCardTransaction tct = new TimeCardTransaction(empId, dayDate, 10.00);
+        tct.execute();
+
+        PayDayTransaction pdt = new PayDayTransaction(dayDate);
+        pdt.execute();
+        Assertions.assertEquals(220.00, pdt.getTotalPay(), 0.001);
+    }
+
+    @Test
+    public void TestPaySingleHourlyEmployeeTwoTimeCards() {
+        int empId = 106;
+        AddHourlyEmployee t = new AddHourlyEmployee(empId, "Heart", "Home 106", 20.00);
+        t.execute();
+
+        WorkCalendar dayDate1 = new WorkCalendar(2022, Calendar.APRIL, 12);
+        TimeCardTransaction tct1 = new TimeCardTransaction(empId, dayDate1, 2.00);
+        tct1.execute();
+
+        WorkCalendar dayDate2 = new WorkCalendar(2022, Calendar.APRIL, 13);
+        TimeCardTransaction tct2 = new TimeCardTransaction(empId, dayDate2, 5.00);
+        tct2.execute();
+
+        WorkCalendar payDate = new WorkCalendar(2022, Calendar.APRIL, 15);
+        PayDayTransaction pdt = new PayDayTransaction(payDate);
+        pdt.execute();
+        Assertions.assertEquals(140.00, pdt.getTotalPay(), 0.001);
+    }
+
+    @Test
+    public void TestPaySingleHourlyEmployeeForWeekPeriod() {
+        int empId = 107;
+        AddHourlyEmployee t = new AddHourlyEmployee(empId, "kirk", "Home 107", 50.00);
+        t.execute();
+
+        WorkCalendar dayDate1 = new WorkCalendar(2022, Calendar.APRIL, 15); //Friday previous week
+        TimeCardTransaction tct1 = new TimeCardTransaction(empId, dayDate1, 2.00);
+        tct1.execute();
+
+        WorkCalendar dayDate2 = new WorkCalendar(2022, Calendar.APRIL, 17); //Saturday
+        TimeCardTransaction tct2 = new TimeCardTransaction(empId, dayDate2, 5.00);
+        tct2.execute();
+
+        WorkCalendar dayDate3 = new WorkCalendar(2022, Calendar.APRIL, 22); //Friday
+        TimeCardTransaction tct3 = new TimeCardTransaction(empId, dayDate3, 8.00);
+        tct3.execute();
+
+        WorkCalendar payDate1 = new WorkCalendar(2022, Calendar.APRIL, 22);
+        PayDayTransaction pdt1 = new PayDayTransaction(payDate1);
+        pdt1.execute();
+        Assertions.assertEquals(650.00, pdt1.getTotalPay(), 0.001);
+
+        WorkCalendar payDate2 = new WorkCalendar(2022, Calendar.APRIL, 15);
+        PayDayTransaction pdt2 = new PayDayTransaction(payDate2);
+        pdt2.execute();
+        Assertions.assertEquals(100.00, pdt2.getTotalPay(), 0.001);
+    }
+
+    @Test
+    public void TestPaySingleHourlyEmployeeForWeekPeriodNoTimeCards() {
+        int empId = 108;
+        AddHourlyEmployee t = new AddHourlyEmployee(empId, "Hannah", "Home 107", 50.00);
+        t.execute();
+
+        WorkCalendar dayDate1 = new WorkCalendar(2022, Calendar.APRIL, 15); //Friday previous week
+        TimeCardTransaction tct1 = new TimeCardTransaction(empId, dayDate1, 2.00);
+        tct1.execute();
+
+        WorkCalendar dayDate2 = new WorkCalendar(2022, Calendar.APRIL, 17); //Saturday
+        TimeCardTransaction tct2 = new TimeCardTransaction(empId, dayDate2, 5.00);
+        tct2.execute();
+
+        WorkCalendar dayDate3 = new WorkCalendar(2022, Calendar.APRIL, 22); //Friday
+        TimeCardTransaction tct3 = new TimeCardTransaction(empId, dayDate3, 8.00);
+        tct3.execute();
+
+        WorkCalendar payDate = new WorkCalendar(2022, Calendar.APRIL, 29);
+        PayDayTransaction pdt = new PayDayTransaction(payDate);
+        pdt.execute();
+        Assertions.assertEquals(0.00, pdt.getTotalPay(), 0.001);
+
+    }
+
 }

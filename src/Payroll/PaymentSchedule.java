@@ -1,5 +1,7 @@
 package Payroll;
 
 public interface PaymentSchedule {
-    boolean isPayDay(WorkCalendar workCalendar);
+    boolean isPayDay(WorkCalendar payDate);
+
+    WorkCalendar getPaymentPeriodStartDate(WorkCalendar payDate);
 }

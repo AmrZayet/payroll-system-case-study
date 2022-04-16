@@ -39,7 +39,7 @@ public class CommissionedClassification implements PaymentClassification {
     }
 
     @Override
-    public double calculatePay(WorkCalendar payDate) {
+    public double calculatePay(WorkCalendar paymentPeriodStartDate, WorkCalendar payDate) {
         return 0;
     }
 }

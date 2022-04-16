@@ -6,6 +6,7 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 public class WorkCalendar extends GregorianCalendar{
+
     public WorkCalendar() {
     }
 
@@ -40,4 +41,35 @@ public class WorkCalendar extends GregorianCalendar{
         return (currentDay == lastDay);
     }
 
+    public boolean isLastDayOfWeek() {
+        int currentDay = this.get(Calendar.DAY_OF_WEEK);
+        return (currentDay == Calendar.FRIDAY);
+    }
+
+    public WorkCalendar getStartOfMonth() {
+        int day = 1;
+        int month = get(Calendar.MONTH);
+        int year = get(Calendar.YEAR);
+        return new WorkCalendar(year, month, day);
+    }
+
+    public WorkCalendar getStartOfWeek() {
+        int day = get(Calendar.DAY_OF_MONTH);
+        int month = get(Calendar.MONTH);
+        int year = get(Calendar.YEAR);
+        WorkCalendar newWorkCalendar = new WorkCalendar(year, month, day);
+
+        int daysFromStartOfWeek = get(Calendar.DAY_OF_WEEK) % 7; //as Saturday is 7 in the calendar class (we want it 0)
+        newWorkCalendar.add(Calendar.DAY_OF_YEAR, -daysFromStartOfWeek);
+        return newWorkCalendar;
+    }
+
+    public WorkCalendar getStartOfTwoWeeks() {
+        return null;
+    }
+
+    public boolean isBetween(WorkCalendar startDate, WorkCalendar endDate) {
+        //compareTo is like (caller date - argument date)
+        return (this.compareTo(startDate) >= 0 && this.compareTo(endDate) <= 0);
+    }
 }

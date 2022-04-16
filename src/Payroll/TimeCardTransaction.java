@@ -2,10 +2,10 @@ package Payroll;
 
 public class TimeCardTransaction implements Transaction {
     int transactionEmployeeId;
-    long transactionDate;
+    WorkCalendar transactionDate;
     double transactionHoursCount;
 
-    public TimeCardTransaction(int transactionEmployeeId, long transactionDate, double transactionHoursCount) {
+    public TimeCardTransaction(int transactionEmployeeId, WorkCalendar transactionDate, double transactionHoursCount) {
         this.transactionEmployeeId = transactionEmployeeId;
         this.transactionDate = transactionDate;
         this.transactionHoursCount = transactionHoursCount;
